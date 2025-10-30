@@ -35,6 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     
+    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -72,7 +73,7 @@ class Token(models.Model):
         on_delete=models.CASCADE, verbose_name=_("User")
     )
     created = models.DateTimeField(_("Created"), auto_now_add=True)
-    permissions = models.ManyToManyField(Permission, blank=True)
+
 
     class Meta:
         # Work around for a bug in Django:

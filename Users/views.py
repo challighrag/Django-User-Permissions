@@ -4,7 +4,8 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import viewsets
 from .authentication import TokenAuthentication
-from rest_framework.permissions import BasePermission
+from .permissions import TokenPermissions
+from rest_framework.permissions import IsAuthenticated
 from .models import User, Task, Token
 from .serializers import UserSerializer, TaskSerializer
 
@@ -16,7 +17,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class TaskViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
-    permission_classes = [BasePermission]
+    permission_classes = [TokenPermissions]
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
