@@ -37,14 +37,15 @@ def login_view(request):
         if action == 'register':
             email = request.POST.get('email')
             password = request.POST.get('password')
+            first_name = request.POST.get('first_name')
 
-            if email and password:
+            if email and password and first_name:
                 if User.objects.filter(email=email).exists():
                     message = "Email already registered."
                 else:
-                    user = User.objects.create_user(email=email, password=password)
+                    user = User.objects.create_user(email=email, password=password, first_name=first_name)
                     # create token for user
-                    token_key = secrets.token_hex(32)
+                    token_key = secrets.token_hex(20)
                     Token.objects.create(user=user, key=token_key)
                     request.session['token'] = token_key
                     login(request, user)
@@ -62,7 +63,7 @@ def login_view(request):
                 try:
                     token = Token.objects.get(user=user)
                 except Token.DoesNotExist:
-                    token = Token.objects.create(user=user, key=secrets.token_hex(32))
+                    token = Token.objects.create(user=user, key=secrets.token_hex(20))
 
                 request.session['token'] = token.key
                 print("Session Token Set: ", request.session.items())
