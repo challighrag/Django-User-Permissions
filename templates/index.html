@@ -39,7 +39,8 @@
     {% if user_found %}
       {% for user in user_found %}
         <div class="user-card">
-          <h3>{{ user.first_name }} {{ user.last_name }} (Age: {{ user.age }})</h3>
+          <h3>Name: {{ user.first_name }}</h3>
+          <h3>Email: {{ user.email }}</h3>
           <h4>Tasks:</h4>
           <ul>
             {% for task in tasks %}

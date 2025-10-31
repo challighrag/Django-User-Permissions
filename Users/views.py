@@ -97,6 +97,7 @@ def home(request):
         return redirect('guest')
 
     message = ''
+    user_found = None
 
     if request.method == 'POST':
         action = request.POST.get('action')
@@ -119,10 +120,17 @@ def home(request):
         # --- Logout ---
         elif action == 'logout':
             return logout_view(request)
+    
+    query = request.GET.get('search', '') 
+    if query: 
+        user_found = User.objects.filter(first_name__icontains=query) | User.objects.filter(email__icontains=query)
 
-    tasks = Task.objects.filter(user=user)
+    tasks = Task.objects.all()
+    print(tasks)
     return render(request, 'index.html', {
         'message': message,
+        'user_found': user_found, #if query else None,
+        'query': query,
         'user': user,
         'tasks': tasks,
         'token': session_token
