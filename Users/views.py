@@ -44,9 +44,7 @@ def login_view(request):
                     message = "Email already registered."
                 else:
                     user = User.objects.create_user(email=email, password=password, first_name=first_name)
-                    # create token for user
                     request.session['token'] = user.token.key
-                    print(user.token.key)
                     login(request, user)
                     # login(request, user)
                     return redirect('home')
@@ -63,7 +61,7 @@ def login_view(request):
                 try:
                     token = Token.objects.get(user=user)
                 except Token.DoesNotExist:
-                    token = Token.objects.create(user=user, key=secrets.token_hex(20))
+                    assert BaseException
 
                 request.session['token'] = token.key
                 print("Session Token Set: ", request.session.items())

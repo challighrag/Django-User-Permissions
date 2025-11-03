@@ -59,15 +59,6 @@ class Task(models.Model):
     def __str__(self):
         return f"User: {self.user.first_name}, Task: {self.title}, Description: {self.description}"
 
-# class Token(models.Model):
-#     # One token /User
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='token')
-#     key = models.CharField(max_length=64, unique=True,default= binascii.hexlify(os.urandom(20)).decode())
-#     permissions = models.ManyToManyField(Permission, blank=True)
-
-#     def __str__(self):
-#         return f"Token for {self.user.first_name}: {self.key}"
-
 
 class Token(models.Model):
     """
@@ -80,14 +71,9 @@ class Token(models.Model):
     )
     created = models.DateTimeField(_("Created"), auto_now_add=True)
 
+    write_enabled = models.BooleanField(verbose_name=_('write enabled'),default=True)
 
     class Meta:
-        # Work around for a bug in Django:
-        # https://code.djangoproject.com/ticket/19422
-        #
-        # Also see corresponding ticket:
-        # https://github.com/encode/django-rest-framework/issues/705
-        # abstract = 'rest_framework.authtoken' not in settings.INSTALLED_APPS
         verbose_name = _("Token")
         verbose_name_plural = _("Tokens")
 
