@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, Permission
 from django.contrib.auth.models import BaseUserManager
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.utils.translation import gettext_lazy as _
 import binascii
 import os
@@ -35,7 +37,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     
-    
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
@@ -43,6 +44,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, ** kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class Task(models.Model):
     # Many tasks /User

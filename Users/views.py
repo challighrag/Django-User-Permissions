@@ -45,10 +45,10 @@ def login_view(request):
                 else:
                     user = User.objects.create_user(email=email, password=password, first_name=first_name)
                     # create token for user
-                    token_key = secrets.token_hex(20)
-                    Token.objects.create(user=user, key=token_key)
-                    request.session['token'] = token_key
+                    request.session['token'] = user.token.key
+                    print(user.token.key)
                     login(request, user)
+                    # login(request, user)
                     return redirect('home')
             else:
                 message = "Email and password are required."
